@@ -167,7 +167,11 @@ void dhtSensors()
     int t = dht.readTemperature();
     // Read temperature as Fahrenheit
     int f = dht.readTemperature(true);
-
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Current value:");
+    lcd.setCursor(0, 1);
+    lcd.print(t);
     /*
     Serial.print("Humidity: ");
     Serial.println(h);
@@ -177,6 +181,11 @@ void dhtSensors()
     Serial.println(f);*/
     if (t >= 32)
     {
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Fire detected..");
+        lcd.setCursor(0, 1);
+        lcd.print("Sending SMS");
         sendSMSFireAndManager();
     }
 }
@@ -223,8 +232,6 @@ void sendSMSFireAndManager()
 
     //  buzzer
     digitalWrite(buzzerPin, HIGH);
-    delay(3000);
-    digitalWrite(buzzerPin, LOW);
 
     for (int i = 0; i < 2; i++)
     {
@@ -238,6 +245,9 @@ void sendSMSFireAndManager()
         mySerial.write(26);
         delay(4000);
     }
+
+    // off buzzer after send SMS
+    digitalWrite(buzzerPin, LOW);
 }
 
 void updateSerial()
